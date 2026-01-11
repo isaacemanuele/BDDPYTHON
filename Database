@@ -9,3 +9,41 @@ project name/
 Id file/
 |----------way of form.py
 |_______README.md
+
+BDDPYTHON/
+├── database/
+│   └── db.py            # Conexión y creación de tablas
+├── models/
+│   └── usuario.py       # Clase Usuario y CRUD
+├── controllers/
+│   └── usuario_ctrl.py  # Lógica de operaciones para usar la clase
+├── app.py               # Punto de entrada / menú de consola
+├── README.md
+└── TASKS.md
+import sqlite3
+
+DB_NAME = "usuarios.db"
+
+def conectar():
+    """Conecta con la base de datos y retorna el objeto conexión"""
+    conn = sqlite3.connect(DB_NAME)
+    return conn
+
+def crear_tabla():
+    """Crea la tabla Usuario si no existe"""
+    conn = conectar()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS usuario (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            edad INTEGER,
+            fecha_creacion TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+# Inicializa la tabla al importar
+crear_tabla()
